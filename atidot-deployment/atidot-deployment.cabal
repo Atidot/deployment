@@ -25,11 +25,13 @@ library
                     , Atidot.Deployment.Types.Lens
                     , Atidot.Deployment.Types.JSON
                     , Atidot.Deployment.Types.CSV
+                    , Atidot.Deployment.Monad
                     , Atidot.Deployment.Compile
   -- other-modules:
   -- other-extensions:
   build-depends:       base
                      , lens
+                     , uniplate
                      , aeson
                      , data-default
                      , bytestring
