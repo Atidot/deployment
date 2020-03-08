@@ -8,7 +8,7 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE RankNTypes #-}
 
-module Atidot.Deployment.ECS where
+module Atidot.Deployment.Cluster where
 
 import           "data-default"  Data.Default (def)
 import           "mtl"           Control.Monad.Reader  (ask, asks)
@@ -19,6 +19,7 @@ import           "stratosphere"  Stratosphere hiding ((.=))
 import                           Atidot.Deployment.Types
 import                           Atidot.Deployment.Monad
 import                           Atidot.Deployment.Compile
+import                           Atidot.Deployment.Container
 
 instance ToResources Cluster where
     toResources Cluster{..} = do

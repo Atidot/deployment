@@ -9,7 +9,7 @@ let
 
   reflexWidgetsSrc = fetchGit {
     url = https://github.com/atidot/reflex-widgets;
-    rev = "1c0a6d9f6075ba370b2414c4aeb853d658e48dd4";
+    rev = "ea488c0cc7dbcde6bc34d17280a01efeb5bf7c1b";
   };
 
   stratosphereSrc = fetchGit {

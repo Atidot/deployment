@@ -27,15 +27,22 @@ library
                     , Atidot.Deployment.Types.CSV
                     , Atidot.Deployment.Monad
                     , Atidot.Deployment.Compile
+                    , Atidot.Deployment.VPC
+                    , Atidot.Deployment.CD
+                    , Atidot.Deployment.Registry
+                    , Atidot.Deployment.Roles
+                    , Atidot.Deployment.Cluster
+                    , Atidot.Deployment.Container
+                    , Atidot.Deployment.Deployment
   -- other-modules:
   -- other-extensions:
   build-depends:       base
                      , lens
-                     , uniplate
                      , aeson
                      , data-default
                      , bytestring
                      , text
+                     , casing
                      , vector
                      , cassava
                      , transformers
@@ -70,6 +77,7 @@ executable atidot-deployment
                      , bytestring
                      , text
                      , aeson
+                     , aeson-pretty
                      , cassava
                      , vector
                      , QuickCheck

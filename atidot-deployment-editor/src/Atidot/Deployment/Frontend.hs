@@ -41,29 +41,7 @@ import           "reflex-select2"          Reflex.Select2.Select2
 import           "reflex-jexcel"           Reflex.JExcel
 import           "reflex-fileapi"          Reflex.FileAPI.FileAPI
 import           "atidot-deployment"       Atidot.Deployment.Types
-import           "atidot-deployment"       Atidot.Deployment.Compile
-
-
-
-defaultDeployment :: Deployment
-defaultDeployment
-    = def
-    & deployment_cluster
-        .~ ( Yes
-           $ def
-           & cluster_tasks
-              .~ [ Yes $ def
-                       & container_name .~ "undins"
-                 , Yes $ def
-                       & container_name .~ "jobrunner"
-                 , Yes $ def
-                       & container_name .~ "api"
-                 , Yes $ def
-                       & container_name .~ "log-server"
-                 , Yes $ def
-                       & container_name .~ "rabbitmq"
-                 ]
-           )
+import           "atidot-deployment"       Atidot.Deployment.Deployment
 
 
 main :: IO ()
@@ -114,27 +92,35 @@ body :: forall t m. (MonadWidget t m)
 body = mdlGrid $ do
     -- initial default configuration
     postBuildE <- getPostBuild
-    let deploymentE = defaultDeployment <$ postBuildE
+    let deploymentE = exampleDeployment <$ postBuildE
     (initialD :: Dynamic t Deployment) <- holdDyn def deploymentE
 
     -- json editor
-    (userInputE :: Event t Deployment) <- mdlCell 4 $ do
-        mdlGrid $ el "h3" $ text "Atidot Configuration"
-        (xD, _) <- jsoneditor def initialD
+    (userInputE :: Event t Deployment) <- mdlCell 5 $ do
+        mdlGrid $ el "h3" $ text "Atidot Deployment"
+        (xD, _) <- jsoneditor jsConfig initialD
         display xD
         return $ updated xD
 
     -- compile to CloudFormation
-    let cloudformationE = toCloudFormation <$> userInputE
+    let cloudformationE = toCloudFormation' <$> userInputE
     let cfTextE = (decodeUtf8 . toStrict . encodeTemplate) <$> cloudformationE
 
     -- codemirror
-    _ <- mdlCell 8 $ do
+    _ <- mdlCell 7 $ do
         mdlGrid $ el "h3" $ text "CloudFormation JSON"
         codemirror cmConfig cfTextE never
 
     return ()
     where
+        jsConfig :: JsonEditorOptions
+        jsConfig
+            = def
+            & jsonEditorOptions_mode  ?~ Tree
+            & jsonEditorOptions_modes ?~ [ Tree
+                                         , Code
+                                         ]
+
         cmConfig :: Configuration
         cmConfig
             = def

@@ -8,7 +8,7 @@
 {-# LANGUAGE RecordWildCards #-}
 {-# LANGUAGE RankNTypes #-}
 
-module Atidot.Deployment.ECS where
+module Atidot.Deployment.CD where
 
 import           "data-default"  Data.Default (def)
 import           "mtl"           Control.Monad.Reader  (ask, asks)
@@ -20,25 +20,8 @@ import                           Atidot.Deployment.Types
 import                           Atidot.Deployment.Monad
 import                           Atidot.Deployment.Compile
 
-instance ToResources Cluster where
-    toResources Cluster{..} = do
-        -- cluster
-        let (cluster :: ECSCluster) = ecsCluster
-
-        -- resource
-        (deps :: Maybe [Text]) <- envDependency _environment_vpc
-        let (resource' :: Resource) = resource _cluster_name cluster
-                                    & resourceDependsOn .~ deps
-
-        -- tasks
-        env' <- ask
-        let env = env'
-                & environment_cluster ?~ resource'
-        let (tasks :: Resources) = mconcat
-                                 . map (runDeploy env . toResources)
-                                 $ _cluster_tasks
-
-        -- result
-        let (rs :: Resources) = [resource']
-                             <> tasks
-        return rs
+instance ToResources CD where
+    toResources _
+        = return
+        [ resource "CD" ecsCluster
+        ]

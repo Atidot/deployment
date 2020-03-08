@@ -11,3 +11,6 @@ makeClassy ''Registry
 makeClassy ''CD
 makeClassy ''Cluster
 makeClassy ''Container
+makeClassyPrisms ''Region
+
+makeLenses ''Environment
